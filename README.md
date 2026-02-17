@@ -49,22 +49,21 @@ Each Claude session:
 
 ## Installation
 
-Clone the repo and copy files into your Claude Code config:
+Clone the repo and copy the folders into your Claude Code config directory. The repo mirrors the `~/.claude/` structure so installation is just copying two folders:
 
 ```bash
 # Clone
 git clone https://github.com/mattsvensson/claude-ralph-loop.git
+cd claude-ralph-loop
 
 # Core toolkit (script + templates)
-mkdir -p ~/.claude/ralph
-cp claude-ralph-loop/ralph.sh ~/.claude/ralph/
-cp claude-ralph-loop/prompt-template.md ~/.claude/ralph/
-cp claude-ralph-loop/prd-template.md ~/.claude/ralph/
+cp -R ralph ~/.claude/ralph
 chmod +x ~/.claude/ralph/ralph.sh
 
 # Slash commands (optional but recommended)
-cp claude-ralph-loop/commands/ralph.md ~/.claude/commands/
-cp claude-ralph-loop/commands/ralph-plan.md ~/.claude/commands/
+mkdir -p ~/.claude/commands
+cp commands/ralph.md ~/.claude/commands/
+cp commands/ralph-plan.md ~/.claude/commands/
 ```
 
 ### Prerequisites
@@ -141,10 +140,11 @@ Key principle: **explicit file paths everywhere**. Ralph starts each iteration w
 claude-ralph-loop/
 ├── README.md                # This file
 ├── LICENSE                  # MIT
-├── ralph.sh                 # Core loop script
-├── prompt-template.md       # Template injected into each Claude session
-├── prd-template.md          # Blank PRD template for new plans
-└── commands/
+├── ralph/                   # → copy to ~/.claude/ralph/
+│   ├── ralph.sh             # Core loop script
+│   ├── prompt-template.md   # Template injected into each Claude session
+│   └── prd-template.md      # Blank PRD template for new plans
+└── commands/                # → copy to ~/.claude/commands/
     ├── ralph.md             # /ralph slash command (monitor + launcher)
     └── ralph-plan.md        # /ralph-plan slash command (interactive PRD builder)
 ```
