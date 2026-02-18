@@ -283,8 +283,9 @@ for ((i = 1; i <= MAX_ITERATIONS; i++)); do
     prompt=$(build_prompt "$PRD_FILE" "$PROGRESS_FILE" "$i")
 
     # Run claude with the constructed prompt
+    # Unset CLAUDECODE so the child session doesn't think it's nested
     set +e
-    output=$(claude -p "$prompt" \
+    output=$(unset CLAUDECODE; claude -p "$prompt" \
         --allowedTools 'Bash(*)' 'Read' 'Write' 'Edit' 'Glob' 'Grep' 'WebFetch' 'WebSearch' \
         2>&1)
     exit_code=$?
