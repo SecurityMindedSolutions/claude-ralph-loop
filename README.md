@@ -142,6 +142,7 @@ claude-ralph-loop/
 ├── LICENSE                  # MIT
 ├── ralph/                   # → copy to ~/.claude/ralph/
 │   ├── ralph.sh             # Core loop script
+│   ├── strip_codeblocks.pl  # Helper: strips fenced code blocks from markdown
 │   ├── prompt-template.md   # Template injected into each Claude session
 │   └── prd-template.md      # Blank PRD template for new plans
 └── commands/                # → copy to ~/.claude/commands/

@@ -44,19 +44,26 @@ ${BOLD}Slash commands (in Claude Code):${NC}
 EOF
 }
 
+strip_code_blocks() {
+    # Remove lines inside fenced code blocks so checkbox patterns
+    # in code examples are not counted as real tasks.
+    perl "$RALPH_DIR/strip_codeblocks.pl" "$1"
+}
+
 count_tasks() {
     local file="$1"
     local pattern="$2"
     local result
-    result=$(grep -c -e "$pattern" "$file" 2>/dev/null) || result=0
+    result=$(strip_code_blocks "$file" | grep -c -e "$pattern" 2>/dev/null) || result=0
     echo "$result"
 }
 
 count_remaining() {
     local file="$1"
-    local unchecked in_progress
-    unchecked=$(grep -c -e '- \[ \]' "$file" 2>/dev/null) || unchecked=0
-    in_progress=$(grep -c -e '- \[~\]' "$file" 2>/dev/null) || in_progress=0
+    local stripped unchecked in_progress
+    stripped=$(strip_code_blocks "$file")
+    unchecked=$(echo "$stripped" | grep -c -e '- \[ \]' 2>/dev/null) || unchecked=0
+    in_progress=$(echo "$stripped" | grep -c -e '- \[~\]' 2>/dev/null) || in_progress=0
     echo $((unchecked + in_progress))
 }
 
@@ -118,7 +125,7 @@ show_status() {
 
     echo ""
     echo -e "${BOLD}Remaining tasks:${NC}"
-    grep -e '- \[ \]' "$prd_file" 2>/dev/null | head -20 | while read -r line; do
+    strip_code_blocks "$prd_file" | grep -e '- \[ \]' 2>/dev/null | head -20 | while read -r line; do
         echo -e "  ${YELLOW}$line${NC}"
     done
 }
@@ -257,10 +264,15 @@ if [[ "$remaining" -gt "$MAX_ITERATIONS" ]]; then
     echo -e "${YELLOW}Ralph will stop after $MAX_ITERATIONS tasks. To cover all tasks, run:${NC}"
     echo -e "  ${BOLD}~/.claude/ralph/ralph.sh $PLAN_NAME $remaining${NC}"
     echo ""
-    read -r -p "Continue with $MAX_ITERATIONS iterations? [Y/n] " response
-    if [[ "$response" =~ ^[Nn] ]]; then
-        echo "Aborted. Re-run with a higher iteration count."
-        exit 0
+    # Skip interactive prompt when there's no TTY (e.g. running in background)
+    if [[ -t 0 ]]; then
+        read -r -p "Continue with $MAX_ITERATIONS iterations? [Y/n] " response
+        if [[ "$response" =~ ^[Nn] ]]; then
+            echo "Aborted. Re-run with a higher iteration count."
+            exit 0
+        fi
+    else
+        echo -e "${YELLOW}No TTY detected — proceeding automatically.${NC}"
     fi
 fi
 
