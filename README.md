@@ -53,7 +53,7 @@ Clone the repo and copy the skills into your Claude Code config directory:
 
 ```bash
 # Clone
-git clone https://github.com/mattsvensson/claude-ralph-loop.git
+git clone https://github.com/SecurityMindedSolutions/claude-ralph-loop.git
 cd claude-ralph-loop
 
 # Install both skills
