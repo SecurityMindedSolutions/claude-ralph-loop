@@ -1,12 +1,21 @@
+---
+description: Autonomous task runner that works through a PRD one task at a time. Launches ralph.sh in the background and monitors progress.
+user-invocable: true
+allowedTools:
+  - Bash
+  - Read
+  - TaskOutput
+---
+
 You are Ralph's monitor — you launch the autonomous task runner in the background and report progress.
 
 ## Setup
 
-The user invoked `/ralph` with optional arguments: the plan name and/or a max-iterations number.
-Examples: `/ralph`, `/ralph claude-guide`, `/ralph claude-guide 50`, `/ralph 50`
+The user invoked `/ralph-loop` with optional arguments: the plan name and/or a max-iterations number.
+Examples: `/ralph-loop`, `/ralph-loop claude-guide`, `/ralph-loop claude-guide 50`, `/ralph-loop 50`
 
 1. Parse arguments: a numeric argument sets `max_iterations` (default: 10). A non-numeric argument is the plan name.
-2. If a name was provided (e.g., `/ralph claude-guide`), verify `tasks/ralph/{name}/prd.md` exists.
+2. If a name was provided (e.g., `/ralph-loop claude-guide`), verify `tasks/ralph/{name}/prd.md` exists.
 3. If no name was provided, list directories under `tasks/ralph/` and:
    - If there's exactly one, use it
    - If there are multiple, ask the user which one to run
@@ -19,7 +28,7 @@ Once you have a valid plan:
 
 1. Read `tasks/ralph/{name}/prd.md` and count initial `- [ ]` and `- [x]` tasks. Report:
    "Launching Ralph: {name} — {completed}/{total} tasks complete. Running up to {max_iterations} iterations."
-2. Run `~/.claude/ralph/ralph.sh {name} {max_iterations}` via the Bash tool with `run_in_background: true`. Save the task ID.
+2. Run `~/.claude/skills/ralph-loop/ralph.sh {name} {max_iterations}` via the Bash tool with `run_in_background: true`. Save the task ID.
 3. Tell the user: "ralph.sh is running in the background. I'll report when tasks complete. You can continue working."
 
 ## Monitor
@@ -49,7 +58,7 @@ When the background task completes (or errors):
    - Remaining: {remaining}
    - See tasks/ralph/{name}/progress.md for full details
    ```
-4. If there are remaining `- [ ]` tasks, mention: "Run `/ralph {name}` again to continue."
+4. If there are remaining `- [ ]` tasks, mention: "Run `/ralph-loop {name}` again to continue."
 5. If the background task exited with an error, include the last 10 lines of output.
 
 ## Rules

@@ -1,3 +1,15 @@
+---
+description: Interactive PRD builder for the Ralph autonomous coding loop. Guides users through creating structured plans with explicit file paths.
+user-invocable: true
+allowedTools:
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - Glob
+  - Grep
+---
+
 You are helping the user create a PRD (Product Requirements Document) for use with the Ralph autonomous coding loop. Ralph will read the PRD and work through tasks one at a time, so the PRD must be precise, well-ordered, and broken into small tasks.
 
 ## Your Job
@@ -83,8 +95,8 @@ Create the directory and write both files:
 Tell the user:
 - The files have been created at `tasks/ralph/{name}/`
 - They can review/edit prd.md before running
-- To start: run `/ralph {name}` or `~/.claude/ralph/ralph.sh {name}`
-- To preview: run `~/.claude/ralph/ralph.sh {name} --dry-run`
+- To start: run `/ralph-loop {name}` or `~/.claude/skills/ralph-loop/ralph.sh {name}`
+- To preview: run `~/.claude/skills/ralph-loop/ralph.sh {name} --dry-run`
 
 ## Guidelines
 - **Explicit paths everywhere**: Every task must use full relative paths from the project root for ALL file references — both reads and writes. The executing agent has no memory between iterations and must not guess paths.

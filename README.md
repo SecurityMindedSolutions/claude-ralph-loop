@@ -49,21 +49,17 @@ Each Claude session:
 
 ## Installation
 
-Clone the repo and copy the folders into your Claude Code config directory. The repo mirrors the `~/.claude/` structure so installation is just copying two folders:
+Clone the repo and copy the skills into your Claude Code config directory:
 
 ```bash
 # Clone
 git clone https://github.com/mattsvensson/claude-ralph-loop.git
 cd claude-ralph-loop
 
-# Core toolkit (script + templates)
-cp -R ralph ~/.claude/ralph
-chmod +x ~/.claude/ralph/ralph.sh
-
-# Slash commands (optional but recommended)
-mkdir -p ~/.claude/commands
-cp commands/ralph.md ~/.claude/commands/
-cp commands/ralph-plan.md ~/.claude/commands/
+# Install both skills
+cp -R ralph-loop ~/.claude/skills/ralph-loop
+cp -R ralph-plan ~/.claude/skills/ralph-plan
+chmod +x ~/.claude/skills/ralph-loop/ralph.sh
 ```
 
 ### Prerequisites
@@ -90,18 +86,18 @@ This starts an interactive conversation that produces:
 From the terminal (standalone):
 
 ```bash
-~/.claude/ralph/ralph.sh my-plan          # Up to 10 iterations (default)
-~/.claude/ralph/ralph.sh my-plan 25       # Up to 25 iterations
-~/.claude/ralph/ralph.sh my-plan --dry-run   # Preview the prompt
-~/.claude/ralph/ralph.sh my-plan --status    # Check completion status
-~/.claude/ralph/ralph.sh --list              # List all plans
+~/.claude/skills/ralph-loop/ralph.sh my-plan          # Up to 10 iterations (default)
+~/.claude/skills/ralph-loop/ralph.sh my-plan 25       # Up to 25 iterations
+~/.claude/skills/ralph-loop/ralph.sh my-plan --dry-run   # Preview the prompt
+~/.claude/skills/ralph-loop/ralph.sh my-plan --status    # Check completion status
+~/.claude/skills/ralph-loop/ralph.sh --list              # List all plans
 ```
 
 Or from within a Claude Code session (runs in background with progress monitoring):
 
 ```
-/ralph my-plan
-/ralph my-plan 50
+/ralph-loop my-plan
+/ralph-loop my-plan 50
 ```
 
 ### PRD Format
@@ -138,16 +134,16 @@ Key principle: **explicit file paths everywhere**. Ralph starts each iteration w
 
 ```
 claude-ralph-loop/
-├── README.md                # This file
-├── LICENSE                  # MIT
-├── ralph/                   # → copy to ~/.claude/ralph/
-│   ├── ralph.sh             # Core loop script
-│   ├── strip_codeblocks.pl  # Helper: strips fenced code blocks from markdown
-│   ├── prompt-template.md   # Template injected into each Claude session
-│   └── prd-template.md      # Blank PRD template for new plans
-└── commands/                # → copy to ~/.claude/commands/
-    ├── ralph.md             # /ralph slash command (monitor + launcher)
-    └── ralph-plan.md        # /ralph-plan slash command (interactive PRD builder)
+├── README.md                   # This file
+├── LICENSE                     # MIT
+├── ralph-loop/                 # → copy to ~/.claude/skills/ralph-loop/
+│   ├── SKILL.md                # /ralph-loop skill (monitor + launcher)
+│   ├── ralph.sh                # Core loop script
+│   ├── strip_codeblocks.pl     # Helper: strips fenced code blocks from markdown
+│   ├── prompt-template.md      # Template injected into each Claude session
+│   └── prd-template.md         # Blank PRD template for new plans
+└── ralph-plan/                 # → copy to ~/.claude/skills/ralph-plan/
+    └── SKILL.md                # /ralph-plan skill (interactive PRD builder)
 ```
 
 ## Design Decisions

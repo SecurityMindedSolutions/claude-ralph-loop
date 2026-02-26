@@ -40,7 +40,7 @@ ${BOLD}Plan location:${NC}
 
 ${BOLD}Slash commands (in Claude Code):${NC}
   /ralph-plan    Create a new plan interactively
-  /ralph <name>  Run a plan within your Claude Code session
+  /ralph-loop <name>  Run a plan within your Claude Code session
 EOF
 }
 
@@ -262,7 +262,7 @@ fi
 if [[ "$remaining" -gt "$MAX_ITERATIONS" ]]; then
     echo -e "${YELLOW}Warning: $remaining tasks remaining but max iterations is $MAX_ITERATIONS${NC}"
     echo -e "${YELLOW}Ralph will stop after $MAX_ITERATIONS tasks. To cover all tasks, run:${NC}"
-    echo -e "  ${BOLD}~/.claude/ralph/ralph.sh $PLAN_NAME $remaining${NC}"
+    echo -e "  ${BOLD}~/.claude/skills/ralph-loop/ralph.sh $PLAN_NAME $remaining${NC}"
     echo ""
     # Skip interactive prompt when there's no TTY (e.g. running in background)
     if [[ -t 0 ]]; then
@@ -335,5 +335,5 @@ echo -e "  Tasks completed: ${GREEN}$completed${NC}"
 echo -e "  Tasks remaining: ${YELLOW}$remaining${NC}"
 
 if [[ "$remaining" -gt 0 ]]; then
-    echo -e "\nRun ${BOLD}~/.claude/ralph/ralph.sh $PLAN_NAME${NC} again to continue."
+    echo -e "\nRun ${BOLD}~/.claude/skills/ralph-loop/ralph.sh $PLAN_NAME${NC} again to continue."
 fi
